@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+
+    <title>slindex</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap/css/bootstrap.min.css">
+  
+      <!-- 上面是实现标签页的3个css和js -->
+<!--     <link href="css/bootstrap.min.css" rel="stylesheet"> -->    
+	  <link href="/stylesheets/style.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/delete.css">
+    <style type="text/css">
+       table thead tr th{text-align: center;} 
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+<!--  第一行：头像和搜索 -->
+      <div class="row" id="head" style="background-color: SandyBrown">
+          <div class="col-md-1">
+            <img src="/images/deshan.jpg" style="width: 80px" class="img-circle" alt="deshan">
+          </div>
+          <div style="float: left;margin-top: 15px;">
+            <button type="button" class="btn btn-default btn-lg"><a href="./signin"><span class="glyphicon glyphicon-off"></span>Logout</a></button>
+          </div>
+      </div>
+
+      <div class="row">
+
+        <div id="body-left" class="col-md-2" style="float:left;height: 400px;background-color: Wheat;">
+          <ul id="myTab" class="nav nav-stacked">
+            <li class="active">
+              <a href="#setting" data-toggle="tab">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;&nbsp;设置样式  
+              </a>
+            </li>
+            <li>
+              <a href="#todo" data-toggle="tab"> 
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;&nbsp;To-Do
+                
+              </a>
+            </li>
+
+            <li><a href="#web" data-toggle="tab"><span class="glyphicon glyphicon-list" aria-hidden="true"></span>&nbsp;&nbsp;我的一天</a></li>
+          </ul>
+          <h3>新建清单区：</h3>
+        <!-- 这部分开始创建清单 -->
+
+          <div id="aaa" style="height: 700px; position: relative;top: 0px;background-color: Wheat; "  class="row">
+
+            <ul class="nav nav-stacked">
+              <template>
+                <li v-for="(list,index) in lists">
+                  <a href="#" @click="changeListSign(list.name)">
+                    &nbsp;&nbsp;<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    &nbsp;      <span>{{list.name}}</span>
+                                <span style="float:right;">{{list.unFinishCount}}</span>
+                                <button @click="deleteList(index)" style="margin-right: 2px;" class="btn btn-success button-sm delbutton">删除</button>
+                  </a>
+                </li>
+              </template>
+            </ul>
+            <div class="row" style="position: absolute;top: 320px;">
+              <div class="col-md-8">
+              <input placeholder="新建清单" type="text" class="form-control" style="width: 150px;" v-model="newList.name"/>
+              </div>
+              <div class="col-md-4">
+              <button @click="addList" class="btn btn-info button-sm" type="submit"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </div>
+            </div>
+
+          <!--显示 todo-->
+            <div id='body-rright' style="position: absolute;left: 700px;top:-200px;width: 450px">
+              <div class="page-header">
+                <h1>添加
+                    <small>事项</small>
+                </h1>
+              </div>
+              <div>
+                <div class="showPanel" style="background: wheat;">
+                    <ul class="nav nav-stacked">
+                        <template v-for="(todo,index) in showList">
+                            <li class="showTodo">
+                                <input type="checkbox" class="toggle" @click="changeState(index)">
+                                <label><span>{{todo.title}}&nbsp;&nbsp;{{ todo.isFinished }}&nbsp;{{todo.year}}&nbsp;{{todo.month}}&nbsp;{{todo.day}}</span></label>
+                                <button @click="edit(todo)" class="btn btn-success delbutton">编辑</button>
+                                <button @click="deleteTdo(index)" class="btn btn-success delbutton">删除</button>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+              </div>
+              <div class="add">
+                <div class="row">
+                  <div class="col-md-10">
+                    <div style="float: left;">
+                    <input
+                    class="form-control addinput input-lg" 
+                    type="text"
+                    placeholder="添加事项"
+                    v-model = "newTodo.title"
+                    style="width: 150px;"
+                    />
+                    </div>
+                    <div style="float: left;">
+                    <input
+                    class="form-control addinput input-lg" 
+                    type="text"
+                    placeholder="年"
+                    v-model = "newTodo.year"
+                    style="width: 100px;"
+                    />   
+                    </div>
+                    <div style="float: left;">
+                    <input
+                    class
+                    ="form-control addinput input-lg" 
+                    type="text"
+                    placeholder="月"
+                    v-model = "newTodo.month"
+                    style="width: 50px;"
+                    />
+                    </div>
+                    <div style="float: left;">
+                    <input
+                    class="form-control addinput input-lg" 
+                    type="text"
+                    placeholder="日"
+                    v-model = "newTodo.day"
+                    style="width: 50px;"
+                    />
+                    </div>
+                   </div>
+                  <div style="float: left;">
+                    <button @click="addTodo()" class="btn btn-info addbutton btn-lg">添加</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!--显示 todo结束-->
+          </div>
+        <!--aaa结束自己新建结束--> -->
+        </div>
+        <div id="myTabContent" class="tab-content col-md-5" style="float:left;background-color:#e7e727;height: 850px">
+        <!-- 设置样式 -->
+          <div class="tab-pane fade in active" id="setting">
+            <h1>开始设置样式啦</h1>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle btn-lg"  data-toggle="dropdown">
+                设置head的颜色<span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:;" onclick="changeRed()">红色</a></li>		
+                <li class="divider"></li>
+                <li><a href="javascript:;" onclick="changeBlue()">蓝色</a></li>
+                <li class="divider"></li>
+                <li><a href="javascript:;" onclick="changeSandyBrown()">原色</a></li>
+              </ul>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown">设置内容框颜色
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">					
+                <li><a href="javascript:;" onclick="changeYellow()">黄色</a></li>
+                <li class="divider"></li>
+                <li><a href="javascript:;" onclick="changeBeige()">原色</a></li>
+              </ul>
+            </div>
+          </div>
+<!-- todo清单 -->
+          <div class="tab-pane fade" id="todo">
+          <!-- 添加todo的具体内容了 -->
+            <div class="page-header">
+            <h1>To-Do事项清单
+            </h1>
+            </div>
+            <div id="todolist">
+            <!-- template是添加事项的模板，待办和完成，删除功能 -->
+              <template v-if="todo.length">
+                <table id="todotable">
+                  <ul><!-- 查找todoByStatus里面的事项 -->
+                    <li v-for="item in todoByStatus" stagger="5000" :class="item.done ? 'done' : ''"> <span class="label">{{item.label}}</span><!-- 显示加入的事项名称-->
+                    <div class="actions">
+                      <button class=" btn btn-picto" type="button" @click="markAsDoneOrUndone(item)" :aria-label="item.done ? 'Undone' : 'Done'" :title="item.done ? 'Undone' : 'Done'"> 
+                        <i aria-hidden="true" class="material-icons">{{ item.done ? '完成' : '待办' }}</i> 
+                      </button>
+                      <button class=" btn btn-picto" type="button" @click="deleteItemFromList(item)" aria-label="Delete" title="Delete"> 
+                        <i aria-hidden="true" class="material-icons">删除</i> 
+                      </button>
+                    </div>
+                    </li>
+                  </ul>
+                </table>
+                <!-- togglebutton标签是实现隐藏已完成的事项的功能 -->
+                <togglebutton 
+                label="隐藏已完成的事项？"
+                name="todosort"
+                @clicked="clickontoogle"/>
+              </template>
+            <!-- 如果列表为空，显示“你的待办事项列表是空的”信息 -->
+              <p v-else class="emptylist"> 你的待办事项列表是空的 </p>
+
+              <form name="newform" v-on:submit.prevent="addItem">
+
+                <label for="newitem">添加待办事项</label>
+
+                <div class="row">
+                  <div class="col-md-8">
+                      <input v-model="newitem" class="form-control" style="width: 195px;" type="text" name="newitem" id="newitem">
+                  </div>
+                  <div class="col-md-2">
+                      <button type="submit" class="btn btn-info button-sm">添加事项</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+
+        <!-- web清单 -->
+          <div class="tab-pane fade" id="web">
+          <!-- 设置了一个折叠的内容分区，分为完成事项和添加事项 -->
+            <div class="panel-group" id="accordion">
+            <!-- 第二个折叠 -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" 
+                    href="#collapseTwo"> 显示和添加任务
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                  <div class="panel-body">
+                  <!-- 添加任务的内容，增删改查 -->
+                    <div id="app">
+                      <div class="input-group" style="width: 400px;">
+                        <form class="form-inline">
+                          <input onkeydown="onSearch(this)" type="text" placeholder="查询内容" class="form-control mr-sm-2" name="key" id="key">
+                        </form>
+                      </div>
+                      <div style="height: 10px;"></div>
+                      <div id="tableM" class="panel panel-warning">
+                      <!-- 在table里面添加任务，并且显示任务 -->
+                        <table class="table table-condensed  table-striped text-center" id="tableId">
+                        <!-- 表格的第一行为标题 -->
+                          <thead>
+                            <tr>
+                              <th style="width: 50px">标号</th>
+                              <th>内容</th>
+                              <th style="width: 120px;">操作</th>
+                            </tr>
+                          </thead>
+                        <!-- 表格里面的内容 -->
+                          <tbody>
+                          <!-- 增加任务的模板 -->
+                            <template v-for="(row,index) in rows">
+                              <tr>
+                                <td>{{row.no}}</td>
+                                <td>{{row.content}}</td>
+                                <td><a href="#" @click="edit(row)">编辑</a>&nbsp;&nbsp;<a href="#" 
+                                @click="deleteItem(index)">删除</a></td>
+                              </tr> 
+                            </template>
+                          <!-- 这一行用于增加任务，保存任务到表格内容里面去 -->
+                            <tr>
+                              <td>
+                                <input type="text" class="form-control" v-model="rowtemplate.no"/>
+                              </td>
+                              <td>
+                                <input type="text"  class="form-control" v-model="rowtemplate.content"/>
+                              </td>
+                              <td>
+                                <button type="button" class="button-primary" @click="save">保存</button>
+                              </td>
+                            </tr>
+                          <!-- 表格内容部分到此结束 -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- 第二个折叠到此结束 -->
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+
+    
+    <script src="/javascripts/scripts.js"></script>
+    <!-- jquery和boostrap引用顺序是不可以颠倒，先引入bootstrap.js再引入jquery-3.1.1.js，导致在加载脚本的时候bootstrap相关规则找不到jquery中需要的内容 -->
+    <script src="/javascripts/jquery/2.0.0/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascripts/vue.js"></script>
+    <script src="/javascripts/webdzy.js"></script>
+    <script src="/javascripts/todo.js"></script>
+    <script src="/javascripts/list.js"></script>
+    <script src="/javascripts/change.js"></script>
+    <script src="/javascripts/search.js"></script>
+
+
+  </body>
+</html>

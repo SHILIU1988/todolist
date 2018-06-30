@@ -1,0 +1,1 @@
+在Visual Studio Code 软件里面导入我的整个文件夹，点击server.js然后在调试中启动调试。获取服务器的端口号。再输入localhost:端口号。
